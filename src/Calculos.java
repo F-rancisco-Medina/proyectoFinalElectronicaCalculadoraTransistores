@@ -327,34 +327,34 @@ public class Calculos extends javax.swing.JFrame {
                                             .addComponent(Vbb, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addComponent(jLabel2)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(ie)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(ieRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(ic)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(icRes, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(ve)
-                                            .addComponent(vc)))
-                                    .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                     .addGroup(layout.createSequentialGroup()
                                                         .addComponent(jLabel4)
                                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                        .addComponent(ibRes, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addGap(19, 19, 19)
+                                                        .addComponent(ibRes, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(18, 18, 18)
                                                         .addComponent(vb))
                                                     .addGroup(layout.createSequentialGroup()
                                                         .addComponent(ic1)
                                                         .addGap(18, 18, 18)
                                                         .addComponent(isatRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addGap(20, 20, 20)))
+                                                        .addGap(20, 20, 20))
+                                                    .addGroup(layout.createSequentialGroup()
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                            .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(ie)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addComponent(ieRes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                            .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(ic)
+                                                                .addGap(10, 10, 10)
+                                                                .addComponent(icRes, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                        .addGap(18, 18, 18)
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addComponent(ve)
+                                                            .addComponent(vc))))
                                                 .addGap(20, 20, 20)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -393,7 +393,7 @@ public class Calculos extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addGap(5, 5, 5)
                                         .addComponent(cal, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 162, Short.MAX_VALUE)))
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(22, 22, 22))))
         );
@@ -641,10 +641,11 @@ public class Calculos extends javax.swing.JFrame {
             ruta = "/img/polarizacion_divisorV_1.jpeg";
         }
         if(opcion1 == 2 && opcion2 == 1){
+            Vbb.setEnabled(false);
             Rb.setEnabled(false);
             rbMul.setEnabled(false);
             this.circuito = 6;
-            ruta = "/img/polarizacion_divisorV_2.jpeg";
+            ruta = "/img/polarizacion_divisorV_1.jpeg";
         }
         if(opcion1 == 3 && opcion2 == 0){
             Vbb.setEnabled(false);
@@ -777,12 +778,12 @@ public class Calculos extends javax.swing.JFrame {
                 //re vcc
                 break;
             case 5:
-                divisorVoltajeExacto();
+                divisorVoltajeExacto(vcc, rc, re, ganancia,r1,r2,mc,me,mr1,mr2);
                 out.println("f5");
                 //divisor de voltaje calculado
                 break;
             case 6:
-                divisorVoltajeAprox();
+                divisorVoltajeAprox(vcc, rc, re, ganancia,r1,r2,mc,me,mr1,mr2);
                 out.println("f6");
                 //PROXIMADO
                 break;
@@ -797,7 +798,7 @@ public class Calculos extends javax.swing.JFrame {
                 //retro serie
                 break;
             case 9:
-                baseComun();
+                baseComun(vcc, rc, re,rb, ganancia,mc,me,mb);
                 out.println("f9");
                 //Base comun
                 break;
@@ -823,10 +824,9 @@ public class Calculos extends javax.swing.JFrame {
     }
     
     void polarizacionFija(float vcc, float vbb, float rc, float rb, float ganancia, double mc, double mb){
-        float vce = 0, icsat = 0, ib = 0, ic = 0, vrc = 0, vrb = 0;
+        float vce = 0, icsat = 0, ib = 0, ic = 0, vrc = 0, vrb = 0,vc=0,vb=0;
         
-        this.vbRes.setText(String.valueOf(vbb));
-        this.vcRes.setText(String.valueOf(vcc));
+        
         
         
         ib = (float) ((vbb - .7) / (rb * mb));
@@ -846,14 +846,17 @@ public class Calculos extends javax.swing.JFrame {
         
         icsat = (float) (vcc / (rc * mc));
         this.isatRes.setText(String.valueOf(icsat));
+        
+        vc=vcc-vrc;
+        this.vcRes.setText(String.valueOf(vc));
+        vb=(float) .7;
+        this.vbRes.setText(String.valueOf(vb));
     }
     
     void polarizacionFijaUnica(float vcc,float rc,float rb,float ganancia, double mc ,double mb ){
-        float vce = 0, icsat = 0, ib = 0, ic = 0, vrc = 0, vrb = 0;
+        float vce = 0, icsat = 0, ib = 0, ic = 0, vrc = 0, vrb = 0,vc,vb;
         
-        this.vbRes.setText(String.valueOf(vcc));
-        this.vcRes.setText(String.valueOf(vcc));
-        
+       
         ib = (float) ((vcc - .7) / (rb * mb));
         this.ibRes.setText(String.valueOf(ib));
         
@@ -871,6 +874,10 @@ public class Calculos extends javax.swing.JFrame {
         
         icsat = (float) (vcc / (rc * mc));
         this.isatRes.setText(String.valueOf(icsat));
+        vc=vcc-vrc;
+        this.vcRes.setText(String.valueOf(vc));
+        vb=(float) .7;
+        this.vbRes.setText(String.valueOf(vb));
         
     }
     
@@ -879,14 +886,13 @@ public class Calculos extends javax.swing.JFrame {
     }
     
     void polarizacionEmisorUnica( float vcc, float rc, float rb, float re, float ganacia, double mc, double mb,  double me){
-        float vce = 0, icsat = 0, ib = 0, ic = 0, vrc = 0, vrb = 0, vre = 0, ie = 0;
+        float vce = 0, icsat = 0, ib = 0, ic = 0, vrc = 0, vrb = 0, vre = 0, ie = 0,vc=0,vb=0;
         
         rc *= mc;
         rb *= mb;
         re *= me;
         
-        this.vbRes.setText(String.valueOf(vcc));
-        this.vcRes.setText(String.valueOf(vcc));
+       
         
         //ib = (float) (vcc - .7) / ((rb *(float) mb) + (1 + ganacia)(re* (float me));
         ib = (float) (vcc - .7) / (rb) + (ganacia + 1) * re;
@@ -896,7 +902,7 @@ public class Calculos extends javax.swing.JFrame {
         this.icRes.setText(String.valueOf(ic));
         
         ie = ic + ib;
-        this.icRes.setText(String.valueOf(ie));
+        this.ieRes.setText(String.valueOf(ie));
         
         vrc = (float) (ic * rc);
         vrb = (float) (ib * rb);
@@ -904,22 +910,93 @@ public class Calculos extends javax.swing.JFrame {
         
         this.vrcRes.setText(String.valueOf(vrc));
         this.vrbRes.setText(String.valueOf(vrb));
-        this.vrbRes.setText(String.valueOf(vre));
+        this.vreRes.setText(String.valueOf(vre));
+         this.veRes.setText(String.valueOf(vre));
         
         vce = vcc - ic * (rc + re);
         this.vceRes.setText(String.valueOf(vce));
         
         icsat = (float) (vcc / (rc + re));
         this.isatRes.setText(String.valueOf(icsat));
+        vc=vcc-vrc;
+        this.vcRes.setText(String.valueOf(vc));
+        vb=(float) (.7+vre);
+        this.vbRes.setText(String.valueOf(vb));
   
     }
     
-    void divisorVoltajeExacto(){
+    void divisorVoltajeExacto(float vcc,float rc,float re,float ganancia,float r1,float r2,double mc,double me,double m1,double m2 ){
+        rc*=mc;
+        re*=me;
+        r1*=m1;
+        r2*=m2;
         
+        float Rth=0,Vth=0,ib=0,ic=0,ie=0,vce=0,Isat=0,vrc=0,vre=0,vc=0;
+        Rth=(r1*r2)/(r1+r2);
+        Vth=(r2*vcc)/(r1+r2);
+        ib=(float)((Vth -.7)/(Rth + ((ganancia+1)*re)));
+        this.ibRes.setText(String.valueOf(ib));
+        
+        ic = ganancia * ib;
+        this.icRes.setText(String.valueOf(ic));
+        
+        ie = ic + ib;
+        this.ieRes.setText(String.valueOf(ie));
+        
+        vce= (float) vcc - (ic*rc)-(ie*re);
+        this.vceRes.setText(String.valueOf(vce));
+        
+        Isat= (float)vcc/(re+rc);
+        this.isatRes.setText(String.valueOf(Isat));
+        
+        vre=(float) re*ie;
+        vc=(vcc/2)+vre;
+        vrc=vcc-vc;
+        this.vcRes.setText(String.valueOf(vc));
+        this.vrcRes.setText(String.valueOf(vrc));
+        this.vreRes.setText(String.valueOf(vre));
+        this.veRes.setText(String.valueOf(vre));
+        
+       
     }
     
-    void divisorVoltajeAprox(){
+    void divisorVoltajeAprox(float vcc,float rc,float re,float ganancia,float r1,float r2,double mc,double me,double m1,double m2 ){
+        rc*=mc;
+        re*=me;
+        r1*=m1;
+        r2*=m2;
         
+        float ib=0,ic=0,ie=0,vce=0,Isat=0,vrc=0,vre=0,vc=0,vb=0;
+        if((ganancia*re)>(10*r2)){
+            vb=(r2*vcc)/(r1+r2);
+            this.vbRes.setText(String.valueOf(vb));
+            vre=(float) (vb -.7);
+            this.vreRes.setText(String.valueOf(vre));
+            this.veRes.setText(String.valueOf(vre));
+            ie=vre/re;
+            this.ieRes.setText(String.valueOf(ie));
+            
+            ic=ie;
+            this.icRes.setText(String.valueOf(ic));
+            
+            vce=vcc-(ic*(rc+re));
+            this.vceRes.setText(String.valueOf(vce));
+            
+            vrc=vcc-vc;
+            vc=(vcc/2)+vre;
+            this.vcRes.setText(String.valueOf(vc));
+            this.vrcRes.setText(String.valueOf(vrc));
+          
+            ib=ic/ganancia;
+            this.ibRes.setText(String.valueOf(ib));
+            
+            Isat= (float)vcc/(re+rc);
+            this.isatRes.setText(String.valueOf(Isat));
+            
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "La condicion no se cumple, intenta otros datos");
+        }
     }
     
     void retro(){
@@ -930,7 +1007,35 @@ public class Calculos extends javax.swing.JFrame {
         
     }
     
-    void baseComun(){
+    void baseComun(float vcc,float rc,float re,float rb,float ganancia, double mc, double me, double mb){
+        rc*=mc;
+        re*=me;
+        rb*=mb;
+        float ib=0,ic=0,ie=0,vce=0,Isat=0,vrc=0,vre=0,vc=0,vb=0,vrb;
+        
+        ib=(float) ((vcc-.7)/(((ganancia+1)*(rc+re))+rb));
+        this.ibRes.setText(String.valueOf(ib));
+        
+        ic=ib*ganancia;
+        this.icRes.setText(String.valueOf(ic));
+        ie=ic+ib;
+        this.ieRes.setText(String.valueOf(ie));
+        
+        vrb=rb*ib;
+        vrc=rc*ic;
+        vre=ie*re;
+        this.vreRes.setText(String.valueOf(vre));
+        this.veRes.setText(String.valueOf(vre));
+        this.vrbRes.setText(String.valueOf(vrb));
+        this.vrcRes.setText(String.valueOf(vrc));
+        
+        Isat= (float)vcc/(re+rc);
+        this.isatRes.setText(String.valueOf(Isat));
+        
+        vb=(float) (.7+vre);
+        this.vbRes.setText(String.valueOf(vb));
+        
+        
         
     }
     
