@@ -768,7 +768,7 @@ public class Calculos extends javax.swing.JFrame {
                 //fija con 1 voltajes
                 break;
             case 3:
-                polarizacionEmisor();
+                polarizacionEmisor(vcc, vbb, rc, rb, re, ganancia, mc, mb, me);
                 out.println("f3");
                 //re con vcc y vbb
                 break;
@@ -788,12 +788,12 @@ public class Calculos extends javax.swing.JFrame {
                 //PROXIMADO
                 break;
             case 7:
-                retro();
+                retro(vcc, rc, rb, re, ganancia,mc,me, mb);
                 out.println("f7");
                 //retro rb
                 break;
             case 8:
-                retroSerie();
+                retroSerie(vcc, rc, rb, re, r1, ganancia,mc,me, mb, mr1);
                 out.println("f8");
                 //retro serie
                 break;
@@ -826,9 +826,6 @@ public class Calculos extends javax.swing.JFrame {
     void polarizacionFija(float vcc, float vbb, float rc, float rb, float ganancia, double mc, double mb){
         float vce = 0, icsat = 0, ib = 0, ic = 0, vrc = 0, vrb = 0,vc=0,vb=0;
         
-        
-        
-        
         ib = (float) ((vbb - .7) / (rb * mb));
         this.ibRes.setText(String.valueOf(ib));
         
@@ -855,7 +852,6 @@ public class Calculos extends javax.swing.JFrame {
     
     void polarizacionFijaUnica(float vcc,float rc,float rb,float ganancia, double mc ,double mb ){
         float vce = 0, icsat = 0, ib = 0, ic = 0, vrc = 0, vrb = 0,vc,vb;
-        
        
         ib = (float) ((vcc - .7) / (rb * mb));
         this.ibRes.setText(String.valueOf(ib));
@@ -881,18 +877,48 @@ public class Calculos extends javax.swing.JFrame {
         
     }
     
-    void polarizacionEmisor(){
-        
-    }
-    
-    void polarizacionEmisorUnica( float vcc, float rc, float rb, float re, float ganacia, double mc, double mb,  double me){
+    void polarizacionEmisor(float vcc, float vbb, float rc, float rb,float re, float ganancia, double mc, double mb, double me){
         float vce = 0, icsat = 0, ib = 0, ic = 0, vrc = 0, vrb = 0, vre = 0, ie = 0,vc=0,vb=0;
-        
         rc *= mc;
         rb *= mb;
         re *= me;
         
-       
+        //ib = (float) (vcc - .7) / ((rb *(float) mb) + (1 + ganacia)(re* (float me));
+        ib = (float) (vbb - .7) / (rb) + (ganancia + 1) * re;
+        this.ibRes.setText(String.valueOf(ib));
+        
+        ic = ganancia * ib;
+        this.icRes.setText(String.valueOf(ic));
+        
+        ie = ic + ib;
+        this.ieRes.setText(String.valueOf(ie));
+        
+        vrc = (float) (ic * rc);
+        vrb = (float) (ib * rb);
+        vre = ie * re;
+        
+        this.vrcRes.setText(String.valueOf(vrc));
+        this.vrbRes.setText(String.valueOf(vrb));
+        this.vreRes.setText(String.valueOf(vre));
+        this.veRes.setText(String.valueOf(vre));
+        
+        vce = vcc - ic * (rc + re);
+        this.vceRes.setText(String.valueOf(vce));
+        
+        icsat = (float) (vcc / (rc + re));
+        this.isatRes.setText(String.valueOf(icsat));
+        vc = vcc-vrc;
+        this.vcRes.setText(String.valueOf(vc));
+        vb = (float) (.7 + vre - vbb);
+        this.vbRes.setText(String.valueOf(vb));
+    }
+    
+    void polarizacionEmisorUnica( float vcc, float rc, float rb, float re, float ganacia, double mc, double mb,  double me){
+        float vce = 0, icsat = 0, ib = 0, ic = 0, vrc = 0, vrb = 0, vre = 0, ie = 0,vc = 0,vb = 0;
+        
+        rc *= mc;
+        rb *= mb;
+        re *= me;
         
         //ib = (float) (vcc - .7) / ((rb *(float) mb) + (1 + ganacia)(re* (float me));
         ib = (float) (vcc - .7) / (rb) + (ganacia + 1) * re;
@@ -999,12 +1025,83 @@ public class Calculos extends javax.swing.JFrame {
         }
     }
     
-    void retro(){
-       
+    void retro(float vcc, float rc, float rb, float re, float ganancia, double mc, double me, double mb){
+      float vce = 0, icsat = 0, ib = 0, ic = 0, vrc = 0, vrb = 0, vre = 0, ie = 0,vc = 0, vb = 0, ve = 0;
+        
+        rc *= mc;
+        rb *= mb;
+        re *= me;
+        
+        //ib = (float) (vcc - .7) / ((rb *(float) mb) + (1 + ganacia)(re* (float me));
+        ib = (float) (vcc - .7) / (rb) + (ganancia + 1) * re + rc;
+        this.ibRes.setText(String.valueOf(ib));
+        
+        ic = ganancia * ib;
+        this.icRes.setText(String.valueOf(ic));
+        
+        ie = ic + ib;
+        this.ieRes.setText(String.valueOf(ie));
+        
+        vrc = (float) (ic * rc);
+        vrb = (float) (ib * rb);
+        vre = ie * re;
+        
+        this.vrcRes.setText(String.valueOf(vrc));
+        this.vrbRes.setText(String.valueOf(vrb));
+        this.vreRes.setText(String.valueOf(vre));
+         this.veRes.setText(String.valueOf(vre));
+        
+        vce = vcc - ic * (rc + re);
+        this.vceRes.setText(String.valueOf(vce));
+        
+        icsat = (float) (vcc / (rc + re));
+        this.isatRes.setText(String.valueOf(icsat));
+        vc = vcc - vrc;
+        this.vcRes.setText(String.valueOf(vc));
+        vb = (float) (.7 + vre - vrb);
+        this.vbRes.setText(String.valueOf(vb));  
+        ve = (float) (.7 + vre);
+        this.veRes.setText(String.valueOf(ve));
+        
     }
     
-    void retroSerie(){
+    void retroSerie(float vcc, float rc, float rb, float re, float r1, float ganancia, double mc, double me, double mb, double mr1){
+        float vce = 0, icsat = 0, ib = 0, ic = 0, vrc = 0, vrb = 0, vre = 0, ie = 0,vc = 0,vb = 0, ve = 0;
+        r1 *= mr1;
+        rc *= mc;
+        rb *= mb;
+        re *= me;
         
+        //ib = (float) (vcc - .7) / ((rb *(float) mb) + (1 + ganacia)(re* (float me));
+        ib = (float) (vcc - .7) / (rb + r1) + (ganancia + 1) * re + rc;
+        this.ibRes.setText(String.valueOf(ib));
+        
+        ic = ganancia * ib;
+        this.icRes.setText(String.valueOf(ic));
+        
+        ie = ic + ib;
+        this.ieRes.setText(String.valueOf(ie));
+        
+        vrc = (float) (ic * rc);
+        vrb = (float) (ib * (rb + r1));
+        vre = ie * re;
+        
+        this.vrcRes.setText(String.valueOf(vrc));
+        this.vrbRes.setText(String.valueOf(vrb));
+        this.vreRes.setText(String.valueOf(vre));
+        this.veRes.setText(String.valueOf(vre));
+        
+        vce = vcc - ic * (rc + re);
+        this.vceRes.setText(String.valueOf(vce));
+        
+        icsat = (float) (vcc / (rc + re));
+        this.isatRes.setText(String.valueOf(icsat));
+        vc = vcc - vrc;
+        this.vcRes.setText(String.valueOf(vc));
+        vb = (float) (.7 + vre - vrb);
+        this.vbRes.setText(String.valueOf(vb));
+        ve = (float) (.7 + vre);
+        this.veRes.setText(String.valueOf(ve));
     }
     
     void baseComun(float vcc,float rc,float re,float rb,float ganancia, double mc, double me, double mb){
